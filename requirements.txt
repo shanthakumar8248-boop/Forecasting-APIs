@@ -6,6 +6,6 @@ numpy
 joblib
 python-multipart
 pydantic
-streamlit
+streamlit>=1.50
 plotly
 requests

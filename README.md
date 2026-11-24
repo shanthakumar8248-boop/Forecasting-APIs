@@ -21,7 +21,7 @@ fee-forecast-api/
 │   └── dashboard.py      → Interactive UI
 ├── data/
 │   └── generate_sample.py
-├── models/               → Saved model files (auto-created)
+├── models/               → Saved model files, one set per target (auto-created, git-ignored)
 ├── requirements.txt
 └── README.md
 ```
@@ -69,11 +69,18 @@ python data/generate_sample.py
 
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | `/data/upload` | Upload CSV |
+| GET | `/health` | Data / trained-model readiness |
+| POST | `/data/upload` | Upload & validate CSV (min 30 valid rows, max 10 MB) |
 | GET | `/data/preview` | Preview data |
-| POST | `/forecast/train` | Train ML model |
-| POST | `/forecast/predict` | Date-range forecast |
-| GET | `/metrics/summary` | Model metrics |
+| GET | `/data/history?target=&days=` | Recent history (used to chart against forecasts) |
+| POST | `/forecast/train` | Train ML model for one target |
+| POST | `/forecast/predict` | Date-range forecast (max ~5 years) |
+| GET | `/metrics/summary?target=` | Model metrics (latest model if `target` omitted) |
+
+> Each target (`fee_collected`, `pending_amount`) has its own saved model, so training one never overwrites the other.
+> Metrics are computed on the most recent 20% of the data (chronological split), which is a realistic test for forecasting.
+
+The dashboard reads the API address from the `FORECAST_API_URL` environment variable (default `http://localhost:8000`).
 
 ---
 

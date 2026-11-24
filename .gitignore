@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+# Runtime artifacts
+models/
+data/uploaded_data.csv
+
+.agents/
+.claude/
+data/sample_fee_data.csv
